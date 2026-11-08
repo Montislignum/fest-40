@@ -69,13 +69,15 @@ function overblik_(ss) {
   const r = (navn) => `'Gæster'!${col(navn)}2:${col(navn)}`;
   const [navn, max, svar, antal] = [r('Navn'), r('Max'), r('Svar'), r('Antal')];
   o.clear();
-  o.getRange('A1:C5').setValues([
-    ['', 'Invitationer', 'Personer'],
-    ['Inviteret', `=COUNTA(${navn})`, `=SUM(${max})`],
-    ['Kommer', `=COUNTIF(${svar},"ja")`, `=SUMIF(${svar},"ja",${antal})`],
+  o.getRange('A1:C1').setValues([['', 'Invitationer', 'Personer']]);
+  o.getRange('A2:A5').setValues([['Inviteret'], ['Kommer'], ['Kan ikke'], ['Mangler svar']]);
+  // setFormulas (ikke setValues): kun den tolker altid engelsk syntaks med komma – arket står på dansk
+  o.getRange('B2:C5').setFormulas([
+    [`=COUNTA(${navn})`, `=SUM(${max})`],
+    [`=COUNTIF(${svar},"ja")`, `=SUMIF(${svar},"ja",${antal})`],
     // Personer: "Kan ikke" tæller også ubrugte pladser hos dem, der kommer færre end Max – så kolonnen går op
-    ['Kan ikke', `=COUNTIF(${svar},"nej")`, '=C2-C3-C5'],
-    ['Mangler svar', '=B2-B3-B4', `=C2-SUMIF(${svar},"ja",${max})-SUMIF(${svar},"nej",${max})`],
+    [`=COUNTIF(${svar},"nej")`, '=C2-C3-C5'],
+    ['=B2-B3-B4', `=C2-SUMIF(${svar},"ja",${max})-SUMIF(${svar},"nej",${max})`],
   ]);
   o.getRange('A1:C1').setFontWeight('bold');
   o.getRange('A2:A5').setFontWeight('bold');
