@@ -71,13 +71,15 @@ function overblik_(ss) {
   o.clear();
   o.getRange('A1:C1').setValues([['', 'Invitationer', 'Personer']]);
   o.getRange('A2:A5').setValues([['Inviteret'], ['Kommer'], ['Kan ikke'], ['Mangler svar']]);
-  // setFormulas (ikke setValues): kun den tolker altid engelsk syntaks med komma – arket står på dansk
+  // Formlerne har bevidst INGEN skilletegn (komma/semikolon), så de virker i et dansk ark.
+  // SUMPRODUCT med ét argument erstatter COUNTIF/SUMIF.
+  const er = (v) => `(${svar}="${v}")`;
   o.getRange('B2:C5').setFormulas([
     [`=COUNTA(${navn})`, `=SUM(${max})`],
-    [`=COUNTIF(${svar},"ja")`, `=SUMIF(${svar},"ja",${antal})`],
+    [`=SUMPRODUCT(${er('ja')}*1)`, `=SUMPRODUCT(${er('ja')}*${antal})`],
     // Personer: "Kan ikke" tæller også ubrugte pladser hos dem, der kommer færre end Max – så kolonnen går op
-    [`=COUNTIF(${svar},"nej")`, '=C2-C3-C5'],
-    ['=B2-B3-B4', `=C2-SUMIF(${svar},"ja",${max})-SUMIF(${svar},"nej",${max})`],
+    [`=SUMPRODUCT(${er('nej')}*1)`, '=C2-C3-C5'],
+    ['=B2-B3-B4', `=C2-SUMPRODUCT((${er('ja')}+${er('nej')})*${max})`],
   ]);
   o.getRange('A1:C1').setFontWeight('bold');
   o.getRange('A2:A5').setFontWeight('bold');
