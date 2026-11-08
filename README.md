@@ -4,7 +4,7 @@ Privat projekt (Montislignum, ikke firma). Statisk side på GitHub Pages med to 
 
 | Ark | Ejer | Indhold |
 |---|---|---|
-| Gæster | Jonas | svar, antal, kost/allergier, hilsen, adresse (fanen Info) |
+| Gæster | Jonas | svar, antal, adresse (fanen Info) |
 | Indslag | toastmasteren | taler og indslag – Jonas ser dem aldrig |
 
 ## Filer

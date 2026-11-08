@@ -4,8 +4,6 @@
 window.FEST = {
   navn: 'Jonas',
   alder: 40,
-  start: '2027-06-12T16:00:00+02:00',
-  slut: 'til de sidste går hjem',
   svarFrist: '2027-05-01',
 
   // Web-app-URL fra Google Apps Script (se README). Tom = demotilstand.
@@ -22,9 +20,7 @@ window.FEST = {
   ],
 
   praktisk: [
-    { titel: 'Kun for voksne', tekst: 'Festen er uden børn – book barnepigen i god tid.' },
-    { titel: 'Påklædning', tekst: 'Havefest-afslappet. Tag noget varmt med til aftenen og sko, der kan tåle græs.' },
-    { titel: 'Transport', tekst: 'Der er hjemmebrygget øl – lad bilen stå, eller aftal en chauffør.' },
-    { titel: 'Gaver', tekst: 'Din tilstedeværelse er gave nok. Vil du alligevel give noget, så tænk i flasker og oplevelser.' },
+    { titel: 'Kun voksne', tekst: 'Børnene bliver hjemme.' },
+    { titel: 'Påklædning', tekst: 'Havefest – tag noget varmt med til aftenen.' },
   ],
 };
