@@ -9,7 +9,7 @@ window.FEST = {
   svarFrist: '2027-05-01',
 
   // Web-app-URL fra Google Apps Script (se README). Tom = demotilstand.
-  api: '',
+  api: 'https://script.google.com/macros/s/AKfycbypMrwlEOS7-zfG043eoBtyqhN8BMQG50Ad5TskiNEC4cKbyXcFsh2arrTunvDOltfr/exec',
   // Toastmasterens egen webapp (Toastmaster.gs). Tom = feltet om taler/indslag skjules.
   toastApi: '',
   toastmaster: 'toastmasteren',   // fx 'Peter (toastmaster)'
