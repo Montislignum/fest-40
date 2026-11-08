@@ -14,13 +14,23 @@ const SITE_URL = 'https://montislignum.github.io/fest-40/'; // ret, hvis repoet 
 const COLS = ['Kode', 'Navn', 'Max', 'Svar', 'Antal', 'Kost', 'Besked', 'Opdateret', 'Link', 'Invitation'];
 const C = Object.fromEntries(COLS.map((n, i) => [n, i]));
 
-// {fornavn} = første ord i Navn, {link} = personligt link
+// {navn} = hele Navn, {link} = personligt link.
+// {du}/{dit} bliver til I/jeres, når Max er over 1.
 const INVITATION =
-  'Hej {fornavn}! 🍺🐖\n' +
+  'Hej {navn}! 🍺🐖\n' +
   'Jeg fylder 40 og holder havefest lørdag 12. juni 2027 – med hjemmebrygget øl, helstegt pattegris, drinks og hygge. ' +
   'Det er en fest for voksne, så børnene bliver hjemme.\n' +
-  'Alt om festen og svar her (dit personlige link):\n{link}\n' +
-  'Håber du kommer! /Jonas';
+  'Alt om festen og svar her ({dit} personlige link):\n{link}\n' +
+  'Håber {du} kommer! /Jonas';
+
+function invitation_(navn, max, link) {
+  const flere = max > 1;
+  return INVITATION
+    .replaceAll('{navn}', String(navn).trim())
+    .replaceAll('{du}', flere ? 'I' : 'du')
+    .replaceAll('{dit}', flere ? 'jeres' : 'dit')
+    .replaceAll('{link}', link);
+}
 
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('Fest')
@@ -60,10 +70,9 @@ function lavKoder() {
       sh.getRange(i + 1, C.Kode + 1).setValue(k);
       r[C.Kode] = k;
     }
-    if (!r[C.Max]) sh.getRange(i + 1, C.Max + 1).setValue(1);
+    if (!r[C.Max]) { sh.getRange(i + 1, C.Max + 1).setValue(1); r[C.Max] = 1; }
     const link = SITE_URL + '?g=' + r[C.Kode];
-    const fornavn = String(r[C.Navn]).trim().split(/\s+/)[0];
-    sh.getRange(i + 1, C.Link + 1, 1, 2).setValues([[link, INVITATION.replace('{fornavn}', fornavn).replace('{link}', link)]]);
+    sh.getRange(i + 1, C.Link + 1, 1, 2).setValues([[link, invitation_(r[C.Navn], Number(r[C.Max]), link)]]);
   }
 }
 
