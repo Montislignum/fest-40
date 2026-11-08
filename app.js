@@ -45,7 +45,7 @@
       try { gemt = JSON.parse(localStorage.getItem(key) || 'null'); } catch {}
       if (method === 'POST') { try { localStorage.setItem(key, JSON.stringify(body)); } catch {} return { ok: true }; }
       if (which === 'toast') return { ok: true, indslag: !!gemt?.indslag, indslagTekst: gemt?.indslagTekst || '' };
-      return { ok: true, guest: { navn: 'Mette og Lars', max: 2, baby: params.has('baby'), svar: gemt }, info: { adresse: 'Havevej 1', stedinfo: '' } };
+      return { ok: true, guest: { navn: 'Mette og Lars', max: 2, baby: params.has('baby'), svar: gemt }, info: { adresse: 'Havevej 1', stedinfo: '', musik: params.get('musik') || '' } };
     }
     const res = method === 'GET'
       ? await fetch(`${url}?g=${encodeURIComponent(code)}`)
@@ -68,6 +68,15 @@
   }
   form.addEventListener('change', () => { sync(); gemt(false); fejl(''); });
   form.addEventListener('input', () => { gemt(false); fejl(''); });
+
+  // Kun rigtige Spotify-links bliver til en knap
+  function spotify(link) {
+    try {
+      const u = new URL(String(link || ''));
+      const ok = u.protocol === 'https:' && (u.hostname === 'spotify.link' || u.hostname === 'spotify.app.link' || u.hostname.endsWith('.spotify.com'));
+      return ok ? u.href : '';
+    } catch { return ''; }
+  }
 
   let gaestNavn = '';
   function fill(guest, toast) {
@@ -106,6 +115,9 @@
         $('#sted').hidden = false;
       }
       form.hidden = false;
+      // På festdagen (Jam-link i Info!A3) bliver topknappen til musikken i stedet for svar
+      const musik = spotify(r.info?.musik);
+      if (musik) Object.assign($('#cta'), { href: musik, textContent: 'Musik' });
       $('#cta').hidden = false;
     } catch (e) {
       fejl('Kunne ikke hente invitationen. Prøv igen om lidt.');

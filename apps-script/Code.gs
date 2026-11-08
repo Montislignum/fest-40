@@ -4,7 +4,8 @@
  * Fane "Gæster": Kode | Navn | Max | Svar | Antal | Kost | Besked | Opdateret | Link | Invitation | Baby
  *   Du udfylder Navn, Max og evt. Baby (alt andet end tom/nej = må tage den lille med).
  *   Menuen "Fest" laver koder, links og Messenger-tekster.
- * Fane "Info": A1 = adresse, A2 = ekstra info om stedet (parkering, ring på osv.).
+ * Fane "Info": A1 = adresse, A2 = ekstra info om stedet (parkering, ring på osv.),
+ *   A3 = Spotify Jam-link (indsættes på festdagen → Musik-knap på siden; slet det bagefter).
  *   Vises kun for gæster med et gyldigt link – aldrig i det offentlige repo.
  *
  * Taler og indslag kommer ALDRIG herind – de går direkte til toastmasterens eget ark
@@ -150,7 +151,11 @@ function doGet(e) {
   return json_({
     ok: true,
     guest: { navn: r[C.Navn], max: Number(r[C.Max] || 1), baby: baby_(r), svar },
-    info: info ? { adresse: info.getRange('A1').getValue(), stedinfo: info.getRange('A2').getValue() } : null,
+    info: info ? {
+      adresse: info.getRange('A1').getValue(),
+      stedinfo: info.getRange('A2').getValue(),
+      musik: String(info.getRange('A3').getValue()).trim(),
+    } : null,
   });
 }
 

@@ -26,6 +26,7 @@ Privat projekt (Montislignum, ikke firma). Statisk side på GitHub Pages med to 
 7. **Fest → Lav koder, links og invitationer**. Kolonnen **Invitation** indeholder nu en færdig Messenger-besked med det personlige link. Kopiér cellen og send den.
    Teksten rettes i `INVITATION` øverst i `Code.gs`. Kør menuen igen bagefter – koderne bevares.
 8. Fanen **Overblik** viser inviteret, kommer, kan ikke og mangler svar – opdateres af sig selv. Kolonnen **Baby** (fx "x") giver pasningsundtagelse i invitation og på siden.
+9. **På festdagen:** start en Spotify Jam, slå "Lad andre ændre, hvad der afspilles" fra, og indsæt Jam-linket i **Info!A3**. Topknappen på alles side bliver til **Musik**. Slet linket bagefter.
 
 ## 2. Toastmasterens ark (toastmasteren gør det selv)
 1. Toastmasteren opretter sit eget Google Sheet → **Udvidelser → Apps Script** → indsætter `Toastmaster.gs`.
