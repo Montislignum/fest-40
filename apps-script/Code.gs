@@ -46,7 +46,6 @@ function onOpen() {
   SpreadsheetApp.getUi().createMenu('Fest')
     .addItem('Opret faner', 'opsaet')
     .addItem('Lav koder, links og invitationer', 'lavKoder')
-    .addItem('Vis status', 'visStatus')
     .addToUi();
 }
 
@@ -60,6 +59,31 @@ function opsaet() {
   if (!info.getRange('A1').getValue()) {
     info.getRange('A1:A2').setValues([['Skriv adressen her'], ['Parkering på vejen. Gå om bag huset til haven.']]);
   }
+  overblik_(ss);
+}
+
+// Fanen "Overblik": tal der opdaterer sig selv via formler mod Gæster
+function overblik_(ss) {
+  const o = ss.getSheetByName('Overblik') || ss.insertSheet('Overblik', 0);
+  const col = (navn) => String.fromCharCode(65 + C[navn]);
+  const r = (navn) => `'Gæster'!${col(navn)}2:${col(navn)}`;
+  const [navn, max, svar, antal] = [r('Navn'), r('Max'), r('Svar'), r('Antal')];
+  o.clear();
+  o.getRange('A1:C5').setValues([
+    ['', 'Invitationer', 'Personer'],
+    ['Inviteret', `=COUNTA(${navn})`, `=SUM(${max})`],
+    ['Kommer', `=COUNTIF(${svar},"ja")`, `=SUMIF(${svar},"ja",${antal})`],
+    // Personer: "Kan ikke" tæller også ubrugte pladser hos dem, der kommer færre end Max – så kolonnen går op
+    ['Kan ikke', `=COUNTIF(${svar},"nej")`, '=C2-C3-C5'],
+    ['Mangler svar', '=B2-B3-B4', `=C2-SUMIF(${svar},"ja",${max})-SUMIF(${svar},"nej",${max})`],
+  ]);
+  o.getRange('A1:C1').setFontWeight('bold');
+  o.getRange('A2:A5').setFontWeight('bold');
+  o.getRange('A3:C3').setFontWeight('bold').setFontSize(14);
+  o.setColumnWidth(1, 130);
+  o.setColumnWidths(2, 2, 110);
+  ss.setActiveSheet(o);
+  ss.moveActiveSheet(1);
 }
 
 function gaester_() {
@@ -92,18 +116,6 @@ function nyKode_() {
   let s = '';
   for (let i = 0; i < 8; i++) s += abc[Math.floor(Math.random() * abc.length)];
   return s;
-}
-
-function visStatus() {
-  const rows = gaester_().getDataRange().getValues().slice(1).filter((r) => r[C.Navn]);
-  const ja = rows.filter((r) => r[C.Svar] === 'ja');
-  const personer = ja.reduce((s, r) => s + Number(r[C.Antal] || 0), 0);
-  const nej = rows.filter((r) => r[C.Svar] === 'nej').length;
-  const mangler = rows.length - ja.length - nej;
-  const kost = ja.filter((r) => r[C.Kost]).length;
-  SpreadsheetApp.getUi().alert(
-    `Invitationer: ${rows.length}\nJa: ${ja.length} (${personer} personer)\nNej: ${nej}\nMangler svar: ${mangler}\nMed kosthensyn: ${kost}`
-  );
 }
 
 function find_(kode) {
