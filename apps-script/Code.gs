@@ -1,8 +1,9 @@
 /**
  * Backend for Jonas 40 – lægges i et Google Sheet via Udvidelser → Apps Script.
  *
- * Fane "Gæster": Kode | Navn | Max | Svar | Antal | Kost | Besked | Opdateret | Link | Invitation
- *   Du udfylder kun Navn og Max. Menuen "Fest" laver koder, links og Messenger-tekster.
+ * Fane "Gæster": Kode | Navn | Max | Svar | Antal | Kost | Besked | Opdateret | Link | Invitation | Baby
+ *   Du udfylder Navn, Max og evt. Baby (alt andet end tom/nej = må tage den lille med).
+ *   Menuen "Fest" laver koder, links og Messenger-tekster.
  * Fane "Info": A1 = adresse, A2 = ekstra info om stedet (parkering, ring på osv.).
  *   Vises kun for gæster med et gyldigt link – aldrig i det offentlige repo.
  *
@@ -11,22 +12,31 @@
  */
 
 const SITE_URL = 'https://montislignum.github.io/fest-40/'; // ret, hvis repoet hedder noget andet
-const COLS = ['Kode', 'Navn', 'Max', 'Svar', 'Antal', 'Kost', 'Besked', 'Opdateret', 'Link', 'Invitation'];
+// Baby står sidst, så kolonnerne i et eksisterende ark ikke flytter sig
+const COLS = ['Kode', 'Navn', 'Max', 'Svar', 'Antal', 'Kost', 'Besked', 'Opdateret', 'Link', 'Invitation', 'Baby'];
 const C = Object.fromEntries(COLS.map((n, i) => [n, i]));
 
-// {navn} = hele Navn, {link} = personligt link.
+// {navn} = hele Navn, {link} = personligt link, {boern} = BOERN eller BOERN_BABY.
 // {du}/{dit} bliver til I/jeres, når Max er over 1.
 const INVITATION =
   'Hej {navn}! 🍺🐖\n' +
   'Jeg fylder 40 og holder havefest lørdag 12. juni 2027 – med hjemmebrygget øl, helstegt pattegris, drinks og hygge. ' +
-  'Det er en fest for voksne, så børnene bliver hjemme.\n' +
+  '{boern}\n' +
   'Alt om festen og svar her ({dit} personlige link):\n{link}\n' +
   'Håber {du} kommer! /Jonas';
+const BOERN = 'Det er en fest for voksne, så børnene bliver hjemme.';
+const BOERN_BABY = 'Det er en fest for voksne – men tag bare den lille med, hvis I ikke kan finde pasning.';
 
-function invitation_(navn, max, link) {
+function baby_(r) {
+  const v = r[C.Baby];
+  return v === true || (typeof v === 'string' && v.trim() !== '' && v.trim().toLowerCase() !== 'nej');
+}
+
+function invitation_(navn, max, link, baby) {
   const flere = max > 1;
   return INVITATION
     .replaceAll('{navn}', String(navn).trim())
+    .replaceAll('{boern}', baby ? BOERN_BABY : BOERN)
     .replaceAll('{du}', flere ? 'I' : 'du')
     .replaceAll('{dit}', flere ? 'jeres' : 'dit')
     .replaceAll('{link}', link);
@@ -72,7 +82,7 @@ function lavKoder() {
     }
     if (!r[C.Max]) { sh.getRange(i + 1, C.Max + 1).setValue(1); r[C.Max] = 1; }
     const link = SITE_URL + '?g=' + r[C.Kode];
-    sh.getRange(i + 1, C.Link + 1, 1, 2).setValues([[link, invitation_(r[C.Navn], Number(r[C.Max]), link)]]);
+    sh.getRange(i + 1, C.Link + 1, 1, 2).setValues([[link, invitation_(r[C.Navn], Number(r[C.Max]), link, baby_(r))]]);
   }
 }
 
@@ -123,7 +133,7 @@ function doGet(e) {
   const info = SpreadsheetApp.getActive().getSheetByName('Info');
   return json_({
     ok: true,
-    guest: { navn: r[C.Navn], max: Number(r[C.Max] || 1), svar },
+    guest: { navn: r[C.Navn], max: Number(r[C.Max] || 1), baby: baby_(r), svar },
     info: info ? { adresse: info.getRange('A1').getValue(), stedinfo: info.getRange('A2').getValue() } : null,
   });
 }

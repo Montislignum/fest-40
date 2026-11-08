@@ -20,7 +20,8 @@ window.FEST = {
   ],
 
   praktisk: [
-    { titel: 'Kun voksne', tekst: 'Børnene bliver hjemme.' },
+    // baby: vises i stedet for tekst til gæster med noget i kolonnen Baby
+    { titel: 'Kun voksne', tekst: 'Børnene bliver hjemme.', baby: 'Men tag bare den lille med, hvis I ikke kan finde pasning.' },
     { titel: 'Påklædning', tekst: 'Havefest – tag noget varmt med til aftenen.' },
   ],
 };

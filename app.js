@@ -10,7 +10,10 @@
   $('#navn').textContent = F.navn;
   $('#alder').textContent = F.alder;
   $('#timeline').innerHTML = F.program.map((p) => `<li><b>${esc(p.tid)}</b>${esc(p.tekst)}</li>`).join('');
-  $('#facts').innerHTML = F.praktisk.map((p) => `<div><dt>${esc(p.titel)}</dt><dd>${esc(p.tekst)}</dd></div>`).join('');
+  const facts = (baby) => {
+    $('#facts').innerHTML = F.praktisk.map((p) => `<div><dt>${esc(p.titel)}</dt><dd>${esc(baby && p.baby ? p.baby : p.tekst)}</dd></div>`).join('');
+  };
+  facts(false);
   const frist = new Date(F.svarFrist + 'T12:00:00');
   $('#frist').textContent = `Senest ${frist.toLocaleDateString('da-DK', { day: 'numeric', month: 'long' })}`;
 
@@ -42,7 +45,7 @@
       try { gemt = JSON.parse(localStorage.getItem(key) || 'null'); } catch {}
       if (method === 'POST') { try { localStorage.setItem(key, JSON.stringify(body)); } catch {} return { ok: true }; }
       if (which === 'toast') return { ok: true, indslag: !!gemt?.indslag, indslagTekst: gemt?.indslagTekst || '' };
-      return { ok: true, guest: { navn: 'Mette og Lars', max: 2, svar: gemt }, info: { adresse: 'Havevej 1', stedinfo: '' } };
+      return { ok: true, guest: { navn: 'Mette og Lars', max: 2, baby: params.has('baby'), svar: gemt }, info: { adresse: 'Havevej 1', stedinfo: '' } };
     }
     const res = method === 'GET'
       ? await fetch(`${url}?g=${encodeURIComponent(code)}`)
@@ -69,6 +72,7 @@
   let gaestNavn = '';
   function fill(guest, toast) {
     gaestNavn = guest.navn;
+    facts(!!guest.baby);
     $('#spoerg').textContent = `Kommer ${guest.max > 1 ? 'I' : 'du'}, ${guest.navn}?`;
     $('#antal').innerHTML = Array.from({ length: guest.max }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('');
     $('#antal-felt').hidden = guest.max < 2;
