@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Jonas 40 – havefest</title>
+  <!-- Forhåndsvisning når linket deles på Messenger/SMS. og:image skal være en fuld URL. -->
+  <meta property="og:title" content="Jonas fylder 40 – havefest 12. juni 2027">
+  <meta property="og:description" content="Hjemmebrygget øl, helstegt pattegris, drinks og hygge. Se programmet og svar her.">
+  <meta property="og:image" content="https://montislignum.github.io/fest-40/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="da_DK">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%BA%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <svg class="garland" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 4 Q100 36 200 4 Q300 36 400 4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <g class="bulbs"></g>
+    </svg>
+    <p class="kicker">Havefest · lørdag 12. juni 2027</p>
+    <h1><span id="navn">Jonas</span> fylder <span class="big" id="alder">40</span></h1>
+    <p class="lead" id="hilsen">Hjemmebrygget øl, helstegt pattegris, drinks og hygge til sent ud på sommernatten.</p>
+    <div class="countdown" id="countdown" aria-live="polite"></div>
+    <a class="btn" href="#svar" id="cta">Svar på invitationen</a>
+  </header>
+
+  <main>
+    <section class="cards">
+      <article class="card"><span class="ico" aria-hidden="true">🍺</span><h3>Hjemmebrygget</h3><p>Fadøl fra eget bryggeri – og noget til dem, der ikke drikker øl.</p></article>
+      <article class="card"><span class="ico" aria-hidden="true">🐖</span><h3>Helstegt gris</h3><p>Langtidsstegt pattegris med sprød svær og alt det gode tilbehør.</p></article>
+      <article class="card"><span class="ico" aria-hidden="true">🍸</span><h3>Drinks og hygge</h3><p>Bar, bål og lyskæder i haven, når solen går ned.</p></article>
+    </section>
+
+    <section id="program">
+      <h2>Program</h2>
+      <ol class="timeline" id="timeline"></ol>
+      <p class="muted" id="slut"></p>
+    </section>
+
+    <section id="sted" hidden>
+      <h2>Sted</h2>
+      <p id="adresse"></p>
+      <p id="stedinfo" class="muted"></p>
+    </section>
+
+    <section id="praktisk">
+      <h2>Praktisk</h2>
+      <dl class="facts" id="facts"></dl>
+    </section>
+
+    <section id="svar">
+      <h2>Kommer du?</h2>
+      <div id="rsvp-state" class="notice">Henter din invitation …</div>
+
+      <form id="rsvp" hidden novalidate>
+        <p class="hello" id="gaest"></p>
+
+        <fieldset class="choice">
+          <legend>Svar</legend>
+          <label><input type="radio" name="kommer" value="ja" required> <span>Ja, selvfølgelig!</span></label>
+          <label><input type="radio" name="kommer" value="nej"> <span>Desværre, jeg/vi kan ikke</span></label>
+        </fieldset>
+
+        <div class="if-yes">
+          <label class="field">Hvor mange kommer?
+            <select name="antal" id="antal"></select>
+          </label>
+          <label class="field">Hvad skal vi vide om mad?
+            <input name="kost" placeholder="fx vegetar, glutenallergi, spiser ikke svinekød" maxlength="200">
+          </label>
+          <div id="toast-felt">
+          <label class="field check"><input type="checkbox" name="indslag"> <span>Jeg vil gerne holde tale eller lave et indslag<br><small class="muted" id="toast-note">Går kun til toastmasteren – Jonas ser det ikke.</small></span></label>
+          <label class="field indslag-tekst">Kort om indslaget (så toastmasteren kan planlægge)
+            <input name="indslagTekst" maxlength="200" placeholder="fx tale ca. 5 min, sang med 3 personer">
+          </label>
+          </div>
+        </div>
+
+        <label class="field">Hilsen til Jonas (valgfri)
+          <textarea name="besked" rows="3" maxlength="500"></textarea>
+        </label>
+
+        <button class="btn" type="submit">Send svar</button>
+        <p class="muted small" id="frist"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>Spørgsmål? Skriv eller ring til Jonas.</p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
