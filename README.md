@@ -36,6 +36,9 @@ Privat projekt (Montislignum, ikke firma). Statisk side på GitHub Pages med to 
 Indtil `toastApi` er sat, er feltet om taler skjult på siden.
 Det er en æresordning: koden ligger i et offentligt repo, så Jonas kunne i princippet slå et indslag op med en gæstekode. Lad være 🙂
 
+## Opdatering af siden
+Hæv `?v=` på style.css, config.js og app.js i `index.html` ved hver ændring. Ellers kan gæster få gammel JS sammen med ny HTML (Pages cacher i 10 min).
+
 ## Ændringer i Apps Script
 **Implementer → Administrer implementeringer → rediger → Ny version**. Så beholder du samme URL.
 
